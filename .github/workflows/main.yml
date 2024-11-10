@@ -1,4 +1,3 @@
-# .github/workflows/sonarcloud.yml
 name: SonarCloud Analysis
 
 # Trigger the workflow on pushes to the main branch or pull requests
@@ -16,11 +15,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Set up SonarCloud Scanner
+        run: |
+          # Install SonarScanner
+          sudo apt-get update
+          sudo apt-get install -y openjdk-11-jdk
+          wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.0.2747-linux.zip
+          unzip sonar-scanner-cli-4.7.0.2747-linux.zip
+          sudo mv sonar-scanner-4.7.0.2747-linux /opt/sonar-scanner
+          export PATH=$PATH:/opt/sonar-scanner/bin
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'  
 
       - name: SonarCloud Scan
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  
         run: |
           sonar-scanner -Dsonar.organization=Leyaine \
                         -Dsonar.projectKey=Leyaine_APDS_Part2 \
                         -Dsonar.login=$SONAR_TOKEN
+                        -Dsonar.java.binaries=target/classes
