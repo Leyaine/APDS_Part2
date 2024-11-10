@@ -19,21 +19,14 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v2
         with:
-          distribution: 'temurin'  # Use the correct distribution for Java setup
-          java-version: '11'       # Specify the Java version if using Java
-
-      - name: Install SonarScanner
-        run: |
-          curl -sSLo sonar-scanner.zip https://github.com/SonarSource/sonar-scanner-cli/releases/download/4.7.0.2747/sonar-scanner-cli-4.7.0.2747-linux.zip
-          unzip sonar-scanner.zip
-          export PATH=$PWD/sonar-scanner-4.7.0.2747-linux/bin:$PATH
-          echo "Checking SonarScanner version:"
-          sonar-scanner --version  # Verify SonarScanner installation
+          distribution: 'temurin'
+          java-version: '11'
 
       - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v1.5  # Uses the official SonarCloud GitHub Action
+        with:
+          args: >
+            -Dsonar.organization=Leyaine
+            -Dsonar.projectKey=Leyaine_APDS_Part2
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Use your GitHub secret
-        run: |
-          sonar-scanner -X -Dsonar.organization=Leyaine \
-                        -Dsonar.projectKey=Leyaine_APDS_Part2 \
-                        -Dsonar.login=$SONAR_TOKEN
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # SonarCloud token secret
