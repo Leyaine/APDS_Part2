@@ -12,28 +12,36 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout the code
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up SonarCloud Scanner
-        run: |
-          # Install SonarScanner
-          sudo apt-get update
-          sudo apt-get install -y openjdk-11-jdk
-          wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.0.2747-linux.zip
-          unzip sonar-scanner-cli-4.7.0.2747-linux.zip
-          sudo mv sonar-scanner-4.7.0.2747-linux /opt/sonar-scanner
-          export PATH=$PATH:/opt/sonar-scanner/bin
-
+      # Step 2: Set up Java environment
       - name: Set up Java
         uses: actions/setup-java@v2
         with:
-          java-version: '11'  
-          distribution: 'temurin'
+          java-version: '11'  # Specify the Java version if you're using Java
+          distribution: 'temurin'  # Java distribution (use temurin)
 
+      # Step 3: Install SonarScanner
+      - name: Install SonarScanner
+        run: |
+          echo "Installing SonarScanner..."
+          # Install necessary tools
+          sudo apt-get update
+          sudo apt-get install -y openjdk-11-jdk wget unzip
+          # Download and unzip SonarScanner
+          wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.0.2747-linux.zip
+          unzip sonar-scanner-cli-4.7.0.2747-linux.zip
+          sudo mv sonar-scanner-4.7.0.2747-linux /opt/sonar-scanner
+          # Add SonarScanner to PATH
+          echo "Adding SonarScanner to PATH..."
+          echo "/opt/sonar-scanner/bin" >> $GITHUB_ENV
+
+      # Step 4: Run the SonarCloud analysis
       - name: SonarCloud Scan
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Use your GitHub secret for SonarCloud token
         run: |
           sonar-scanner -Dsonar.organization=Leyaine \
                         -Dsonar.projectKey=Leyaine_APDS_Part2 \
