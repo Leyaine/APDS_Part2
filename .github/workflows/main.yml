@@ -43,7 +43,8 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Use your GitHub secret for SonarCloud token
         run: |
+          echo "Running SonarCloud scan..."
           sonar-scanner -Dsonar.organization=Leyaine \
                         -Dsonar.projectKey=Leyaine_APDS_Part2 \
-                        -Dsonar.login=$SONAR_TOKEN
+                        -Dsonar.login=$SONAR_TOKEN \
                         -Dsonar.java.binaries=target/classes
