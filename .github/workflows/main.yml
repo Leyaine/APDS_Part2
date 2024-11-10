@@ -16,9 +16,10 @@ jobs:
 
       - name: SonarCloud Scan
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Use your GitHub secret
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           npx sonar-scanner \
             -Dsonar.organization=Leyaine \
             -Dsonar.projectKey=Leyaine_APDS_Part2 \
-            -Dsonar.sources=.
+            -Dsonar.sources=. \
+            -Dsonar.host.url="https://sonarcloud.io"
