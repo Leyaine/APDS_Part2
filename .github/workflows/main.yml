@@ -1,7 +1,5 @@
-# .github/workflows/sonarcloud.yml
 name: SonarCloud Analysis
 
-# Trigger the workflow on pushes to the main branch or pull requests
 on:
   push:
     branches:
@@ -16,17 +14,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Java
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'temurin'  # Ensure compatibility with OpenJDK
-          java-version: '11'       # Java 11, compatible with SonarCloud requirements
-
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v1.5  # Uses SonarCloud GitHub Action
-        with:
-          args: >
-            -Dsonar.organization=Leyaine
-            -Dsonar.projectKey=Leyaine_APDS_Part2
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # SonarCloud token secret
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Use your GitHub secret
+        run: |
+          npx sonar-scanner \
+            -Dsonar.organization=Leyaine \
+            -Dsonar.projectKey=Leyaine_APDS_Part2 \
+            -Dsonar.sources=.
