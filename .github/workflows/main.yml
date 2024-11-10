@@ -19,11 +19,11 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v2
         with:
-          distribution: 'temurin'
-          java-version: '11'
+          distribution: 'temurin'  # Ensure compatibility with OpenJDK
+          java-version: '11'       # Java 11, compatible with SonarCloud requirements
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v1.5  # Uses the official SonarCloud GitHub Action
+        uses: SonarSource/sonarcloud-github-action@v1.5  # Uses SonarCloud GitHub Action
         with:
           args: >
             -Dsonar.organization=Leyaine
