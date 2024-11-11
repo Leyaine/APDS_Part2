@@ -1,31 +1,35 @@
-name: SonarCloud Analysis
+name: CI Workflow
 
 on:
   push:
     branches:
       - main
   pull_request:
+    branches:
+      - main
 
 jobs:
-  sonarcloud:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
+      
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Java 17
-        uses: actions/setup-java@v2
+    
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          node-version: '16'  
 
-      - name: SonarCloud Scan
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          npx sonar-scanner \
-            -Dsonar.organization=leyaine \
-            -Dsonar.projectKey=Leyaine_APDS_Part2 \
-            -Dsonar.sources=. \
-            -Dsonar.host.url="https://sonarcloud.io"
+     
+      - name: Install dependencies
+        run: npm install
+
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build project
+        run: npm run build  
