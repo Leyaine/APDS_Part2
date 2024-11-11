@@ -1,43 +1,28 @@
-name: CI Workflow
+name: Build and Test
 
 on:
   push:
     branches:
       - main
   pull_request:
-    branches:
-      - main
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Check out the code
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Step 2: Set up Node.js environment
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'  # Specify the Node.js version you need
+      - name: Navigate to Project Directory
+        working-directory: ApdsPart2/ApdsPart2
+        run: |
+          echo "Switched to the correct project directory"
 
-      # Step 3: Navigate to subdirectory (only if package.json is in a subdirectory)
-      - name: Navigate to project folder
-        run: cd APDS_Part2  # Adjust to your project's subfolder
-
-      # Step 4: Install dependencies
       - name: Install dependencies
         run: npm install
-        working-directory: ./APDS_Part2  # Adjust to your project's subfolder
+        working-directory: ApdsPart2/ApdsPart2
 
-      # Step 5: Run tests
-      - name: Run tests
+      - name: Run Tests
         run: npm test
-        working-directory: ./APDS_Part2  # Adjust to your project's subfolder
-
-      # Step 6: Build the project (optional, if you have a build step)
-      - name: Build project
-        run: npm run build  # Change to the actual build command, if needed
-        working-directory: ./APDS_Part2  # Adjust to your project's subfolder
+        working-directory: ApdsPart2/ApdsPart2
